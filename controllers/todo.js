@@ -63,10 +63,9 @@ export const editTodo = async (req, res) => {
 export const deleteTodo = async (req, res) => {
     try {
         const { id } = req.params
-        const todo = Todo.findById(id, (err) => {
-            if (err) return res.send('No such ToDo exists')
-        })
-        if (!todo) {
+        const todo =await Todo.findById(id)
+        console.log(todo)
+        if (todo==null) {
             return res.send('No such ToDo exists')
         }
         await Todo.deleteOne(todo)
