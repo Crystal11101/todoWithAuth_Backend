@@ -1,5 +1,5 @@
 import express from "express"
-import userAuth from "../userAuth.js"
+import userAuth from "../middleware/userAuth.js"
 import { createTodo, deleteTodo, editTodo, getAllTodos } from '../controllers/todo.js'
 
 const router = express.Router()

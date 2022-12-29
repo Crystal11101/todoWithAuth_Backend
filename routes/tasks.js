@@ -1,5 +1,5 @@
 import express from "express"
-import userAuth from "../userAuth.js"
+import userAuth from "../middleware/userAuth.js"
 import { addTask, checkTask, deleteTask } from "../controllers/tasks.js"
 
 const router = express.Router()

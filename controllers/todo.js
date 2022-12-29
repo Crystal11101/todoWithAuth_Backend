@@ -13,7 +13,7 @@ export const getAllTodos = async (req, res) => {
         }
         return res.send(reqTodo)
     } catch (err) {
-        return res.send(err.message)
+        console.log(err.message)
     }
 }
 

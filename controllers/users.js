@@ -1,45 +1,39 @@
-import bcrypt from 'bcrypt'
 import User from '../models/user.model.js'
-import jwt from 'jsonwebtoken';
+import admin from '../server.js'
+import bcrypt, { hash } from 'bcrypt'
+import { auth } from '../firebase.js'
+import { signInWithCustomToken, signOut } from 'firebase/auth'
 
 export const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
-        if (await User.findOne({ email })) {
-            return res.send('Email is already in use')
-        }
+        const { email, password } = req.body
+        if (await User.findOne({ email })) return res.send('Email already in use')
         const hashPass = await bcrypt.hash(password, 10)
-        await User.create({ name: name, email: email, password: hashPass })
-        res.sendStatus(200)
+        await User.create({ email: email, password: hashPass })
+        res.send('User created')
     } catch (err) {
+        res.sendStatus(400)
         console.log(err.message)
-        res.send(err.message)
     }
 }
 
 export const loginUser = async (req, res) => {
-    const user = await User.findOne({ "email": req.body.email });
-    if (user == null) {
-        res.send('Incorrect email')
-    }
     try {
-        if (await bcrypt.compare(req.body.password, user.password)) {
-            const token = await jwt.sign(user.toJSON(), process.env.ACCESS_TOKEN, { expiresIn: '10m' })
-            res.status(200).cookie("token", token, {
-                expiresIn: '10m',
-                httpOnly: true,
-                // secure:true
-            }).send('Login successful')
+        const { email, password } = req.body
+        const user = await User.findOne({ email })
+        if (user == null) return res.send('Email not registered')
+        if (await bcrypt.compare(password, user.password)) {
+            const token = await admin.auth().createCustomToken(process.env.ACCESS_TOKEN)
+            await signInWithCustomToken(auth, token)
+            return res.send('Signed in')
         }
-        else
-            res.send('Wrong password')
     } catch (err) {
         console.log(err.message)
-        res.send('Error has occurred')
+        return res.sendStatus(400)
     }
 }
 
 export const logoutUser = async (req, res) => {
-    res.clearCookie("token")
+    signOut(auth)
     res.send('logged out')
 }

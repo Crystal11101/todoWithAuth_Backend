@@ -3,16 +3,14 @@ import usersRoute from './routes/users.js'
 import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
-import userAuth from './userAuth.js'
 import todoRoute from './routes/todo.js'
 import tasksRoute from './routes/tasks.js'
+import './firebase.js'
 
 const app=express()
 
-// app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use(usersRoute)
 app.use(cookieParser())
 dotenv.config()
 
