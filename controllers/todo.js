@@ -4,9 +4,9 @@ import Todo from '../models/todo.model.js'
 export const getAllTodos = async (req, res) => {
     try {
         const user = req.user
-        if (user == null) {
-            return res.status(401).send('User not found')
-        }
+        // if (user == null) {
+        //     return res.status(401).send('User not found')
+        // }
         const reqTodo = await Todo.find({ user_id: user._id })
         if (reqTodo == null) {
             return res.send('No ToDos')
@@ -20,21 +20,17 @@ export const getAllTodos = async (req, res) => {
 export const createTodo = async (req, res) => {
     try {
         const user = req.user
-        if (user == null) {
-            return res.status(401).send('User not found')
-        }
+        console.log(user._id)
         const { title } = req.body
-        // if(title==null){
-        //     return res.send('Title required')
-        // }    
-        const todo = new Todo({
+        const todo =await new Todo({
             title,
             user_id: user._id
         })
         await Todo.create(todo)
+        console.log(todo)
         return res.send('Created Todo')
     } catch (err) {
-        return res.send(err.message)
+        console.log(err.message)
     }
 }
 

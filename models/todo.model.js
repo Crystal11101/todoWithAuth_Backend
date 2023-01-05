@@ -15,7 +15,8 @@ const todoSchema=new mongoose.Schema({
     },
     user_id:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'user',
+        required:true,
+        $ref:'user',
     },
     tasks:[taskSchema]
 })

@@ -1,5 +1,18 @@
 import Todo from '../models/todo.model.js'
 
+export const getTasks=async(req,res)=>{
+    try{
+        const {id}=req.params
+        const todo=await Todo.findById(id)
+        if(todo==null){
+            return res.send('No such Todo exists')
+        }
+        return res.send(todo.tasks)
+    }catch(err){
+        // return res.sendStatus(400)
+        console.log(err.message)
+    }
+}
 
 export const addTask=async (req, res) => {
     try {

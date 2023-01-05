@@ -21,9 +21,10 @@ export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body
         const user = await User.findOne({ email })
+        console.log(user._id)
         if (user == null) return res.send('Email not registered')
         if (await bcrypt.compare(password, user.password)) {
-            const token = await admin.auth().createCustomToken(process.env.ACCESS_TOKEN)
+            const token = await admin.auth().createCustomToken(email)
             await signInWithCustomToken(auth, token)
             return res.send('Signed in')
         }
@@ -32,6 +33,10 @@ export const loginUser = async (req, res) => {
         return res.sendStatus(400)
     }
 }
+
+// export const verifyToken = asnyc (token) => {
+//     //TODO: Validate token
+// }
 
 export const logoutUser = async (req, res) => {
     signOut(auth)

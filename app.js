@@ -14,7 +14,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
 dotenv.config()
 
-mongoose.set('strictQuery', false)
+mongoose.set('strictQuery', true)
 mongoose.connect('mongodb://127.0.0.1:27017/tododb');
 
 app.use('/',usersRoute)

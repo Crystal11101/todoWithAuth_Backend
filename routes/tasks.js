@@ -1,8 +1,10 @@
 import express from "express"
 import userAuth from "../middleware/userAuth.js"
-import { addTask, checkTask, deleteTask } from "../controllers/tasks.js"
+import { addTask, checkTask, deleteTask, getTasks } from "../controllers/tasks.js"
 
 const router = express.Router()
+
+router.get('/getTasks/:id', userAuth, getTasks)
 
 router.patch('/addTask/:id', userAuth, addTask)
 
